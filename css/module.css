@@ -1,0 +1,25 @@
+body {
+  background-color: #C0C0C0;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 3.5em;
+  color: red;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.sock-gallery__sock {
+  display: inline-block;
+  height: 200px;
+  margin-top: 5px;
+  border: 2px solid blue;
+}
+
+#sock-image {
+  height: 200px;
+  width: 200px;
+}
+
+
+
