@@ -92,14 +92,14 @@ function initializeGrid() {
 }
 
 var sockColorMapping = [
-      "hsl(  0,100,  0)", // black
-      "hsl(  0,100,  0)", // black
-      "hsl(  0,100,100)", // white
-      "hsl(  0,100,100)", // white
-      "hsl(  0,100, 50)", // color1
-      "hsl( 90,100, 50)", // color2
-      "hsl(180,100, 50)", // color3
-      "hsl(270,100, 50)"  // color4
+      "black", //hsl(  0,100,  0)", // black
+      "black", //hsl(  0,100,  0)", // black
+      "white", //hsl(  0,100,100)", // white
+      "white", //hsl(  0,100,100)", // white
+      "yellow", //hsl(  0,100, 50)", // color1
+      "red",  //hsl( 90,100, 50)", // color2
+      "pink", //hsl(180,100, 50)", // color3
+      "blue", //hsl(270,100, 50)"  // color4
 ];
 
 function randomSockColor() {
@@ -137,29 +137,29 @@ function drawSocks() {
     var elSock = document.getElementById(index);
     var ctx = elSock.getContext('2d');
 
-    ctx.fillStyle = this.sockColor;
+    ctx.fillStyle = sockHolder[index].sockColor;
     ctx.fillRect(100, 10, 65, 75);
 
-    ctx.fillStyle = this.stripeColor;
+    ctx.fillStyle = sockHolder[index].stripeColor;
     ctx.fillRect(100, 20, 65, 10);
 
     ctx.moveTo(165, 85);
     ctx.lineTo(100, 65);
-    ctx.strokeStyle = this.sockColor;
+    ctx.strokeStyle = sockHolder[index].sockColor;
     ctx.stroke();
     ctx.lineTo(65, 110);
     ctx.stroke();
     ctx.lineTo(130, 115);
     ctx.stroke();
     ctx.lineTo(165, 85);
-    ctx.fillStyle = this.sockColor;
+    ctx.fillStyle = sockHolder[index].sockColor;
     ctx.fill();
 
     ctx.beginPath();
     ctx.arc(98, 110, 33, 6, Math.PI, false);
     ctx.closePath();
     ctx.lineWidth = 2;
-    ctx.fillStyle = this.sockColor;
+    ctx.fillStyle = sockHolder[index].sockColor;
     ctx.fill();
   });
 }
