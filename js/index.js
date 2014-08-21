@@ -2,12 +2,17 @@
 // SockSort by Elizabeth Rives & Charles Gust
 //
 // total number of socks is gridSize * gridSize
+var nMaxScores = 4;
 var gridSize = 4; // length of the socks gridSize
 var nMaxSocks = gridSize * gridSize;
 var sockMatch = [];// [nMaxSocks][nMaxSocks];
 var sockHolder = []; //[nMaxSocks];
+var sockDisplayOrder = []; //[nMaxSocks];
+var matchLists;
 
-
+function toNumber(sbNumber) {
+  return parseInt(sbNumber,10);
+}
 
 //
 // a Sock has two attributes, but could have more
@@ -15,9 +20,10 @@ var sockHolder = []; //[nMaxSocks];
 //    color: the sock color
 //    stripeColor: the stripe color
 // for instance: size, pattern, material, soil
-function Sock(sockColor, stripeColor) {
+function Sock(sockColor, stripeColor, displayOrder) {
   this.sockColor = sockColor;
   this.stripeColor = stripeColor;
+  this.displayOrder = displayOrder;
   this.paired = false;      // a sock may only be matched if not already paired
 
   this.setPosition = function(row, column) {
@@ -63,14 +69,15 @@ var matchImpossible = 3;
 var matchGrid = [[matchImpossible, matchTechnical],[matchClose, matchExact]];
 
 function initializeGrid() {
-  var ml = document.createElement("matchLists");  // maybe needs to be in function?
-  var $matchLists = $(ml);
+  matchLists = document.createElement("matchLists");  // maybe needs to be in function?
+  var $ml = $(matchLists);
   var $j;
 
-  for (var iScore=0; iScore < 4; iScore++) {
+  for (var iScore=0; iScore < nMaxScores-1; iScore++) {
     $j = $("<ul>");
-    $matchLists.append($j);
+    $ml.append($j);
   }
+
   for (var iRow = 1; iRow < nMaxSocks; iRow++) {
     sockMatch[iRow] = new Array();
     for (var iCol = 0; iCol < iRow; iCol++) {
@@ -81,12 +88,16 @@ function initializeGrid() {
 
       // If we build the matchList now, we don't even need sockMatch
       //var mlElem = new matchListElem(iRow, iCol);
-      $j = $matchLists;
-      $j = $j.find(" ul:eq(" + score + ")");
-      $j = $j.append('<li>');
-      $j = $j.attr("data-row", iRow);
-      $j = $j.attr("data-col", iCol);
-      $j = $j.text(" ");
+      if (score < nMaxScores-1) {
+        // anything with nMaxScore is a leftover, so don't need a list
+        var $jLi = $("<li>{" + iRow + "," + iCol + "}</li>");
+        $jLi.attr("data-row", iRow);
+        $jLi.attr("data-col", iCol);
+
+        $j = $ml;
+        $j = $j.find(" ul:eq(" + score + ")");
+        $j = $j.append($jLi);
+      }
     }
   }
 }
@@ -108,13 +119,14 @@ function randomSockColor() {
 
 function generateSocksRandom() {
   for (n = 0; n < nMaxSocks; n++) {
-    sockHolder[n] = new Sock(randomSockColor(), randomSockColor());
+    sockHolder[n] = new Sock(randomSockColor(), randomSockColor(), n);
+    sockDisplayOrder[n] = n;
   }
 }
 
 function makeDivs() {
 
-  for (var i = 0; i < 16; i++) {
+  for (var i = 0; i < nMaxSocks; i++) {
     var $newDiv = $('<div class="four columns laundrybasket__sock"></div>');
     $('#laundrybasket').append($newDiv);
   }
@@ -170,15 +182,70 @@ function swapSocks() {
   $('#1').before($('#2'));
 }
 
+function changeDisplayOrder(iSockIndex, iDisplayOrder) {
+  // only move the sock if the sock's order changes
+  if (sockHolder[iSockIndex].displayOrder != iDisplayOrder) {
+    // save the index to be evicted and the display soon vacant for the swap
+    var iSockIndexEvicted = sockDisplayOrder[iDisplayOrder];
+    var iDisplaySoonVacant = sockHolder[iSockIndex].displayOrder;
+
+    // swap the global display order
+    sockDisplayOrder[iDisplayOrder] = iSockIndex;
+    sockDisplayOrder[iDisplaySoonVacant] = iSockIndexEvicted;
+
+    // swap each socks recording of it's display position
+    sockHolder[iSockIndex].displayOrder = iDisplayOrder;
+    sockHolder[iSockIndexEvicted].displayOrder = iDisplaySoonVacant;
+  }
+}
+//
+//  The matchLists element is the root of the jQuery data structure we have built
+//  It has as many <ul> lists as we have possible scores, and the <li>'s in each
+//  list has data-row and data-col set to indicate which tuple is represented.
+//  Any sock that is already paired must be skipped over and cannot be paired again.
+//
+function sockSort() {
+  var nCurSockCount = 0;
+  var $ml = $(matchLists);
+  var $j;
+
+  // process all the possible scores, but we don't have to process the last
+  // one because all of those are the left overs.
+  for( var iScores = 0; iScores < nMaxScores-1; iScores++) {
+      $j = $ml;
+      $j = $j.find(" ul:eq(" + iScores + ")");
+      $j = $j.find("li");
+      $j.each(function() {
+        if (nCurSockCount == nMaxSocks) {
+          // early exit when no more socks to move
+          return;
+        }
+        var iFirst = toNumber($(this).attr("data-row"));
+        var iSecond = toNumber($(this).attr("data-col"));
+        if ( (!sockHolder[iFirst].paired) && (!sockHolder[iSecond].paired)) {
+          // we've got the next pair!!!
+          sockHolder[iFirst].paired = true;
+          sockHolder[iSecond].paired = true;
+
+          changeDisplayOrder(iFirst, nCurSockCount++);
+          changeDisplayOrder(iSecond, nCurSockCount++);
+        }
+      });
+      if (nCurSockCount == nMaxSocks) {
+        // early exit when no more socks can match
+        break;
+      }
+  }
+}
+
 alert("start");
 generateSocksRandom();
-initializeGrid();
 makeDivs();
 makeCanvasElems();
 drawSocks();
-swapSocks();
-
-
+//swapSocks();
+initializeGrid();
+sockSort();
 
 
 
