@@ -18,6 +18,7 @@ var sockHolder = []; //[nMaxSocks];
 function Sock(sockColor, stripeColor) {
   this.sockColor = sockColor;
   this.stripeColor = stripeColor;
+  this.paired = false;      // a sock may only be matched if not already paired
 
   this.setPosition = function(row, column) {
     this.row = row;
@@ -25,8 +26,7 @@ function Sock(sockColor, stripeColor) {
   };
 }
 
-
-//
+git//
 // used to change the position of two socks
 // This function intentionally does not use two calls to a swap function to
 //  reserve the possibility that the exchange could be visualized or animated
@@ -63,41 +63,43 @@ var matchImpossible = 3;
 var matchGrid = [[matchImpossible, matchTechnical],[matchClose, matchExact]];
 
 function initializeGrid() {
+  var ml = document.createElement("matchLists");  // maybe needs to be in function?
+  var $matchLists = $(ml);
+  var $j;
+
+  for (var iScore=0; iScore < 4; iScore++) {
+    $j = $("<ul>");
+    $matchLists.append($j);
+  }
   for (var iRow = 1; iRow < nMaxSocks; iRow++) {
     sockMatch[iRow] = new Array();
     for (var iCol = 0; iCol < iRow; iCol++) {
-      //var score = matchImpossible;
-
       var iMGRow = (sockHolder[iRow].sockColor == sockHolder[iCol].sockColor) ? 1:0;
       var iMGCol = (sockHolder[iRow].stripeColor == sockHolder[iCol].stripeColor) ? 1:0;
       var score = matchGrid[iMGRow][iMGCol];
       sockMatch[iRow][iCol] = score;
-/*
-      if (sockHolder[row].sockColor == sockHolder[column].sockColor) {
-        if (sockHolder[row].stripeColor == sockHolder[column].stripeColor) {
-          score = matchExact;
-        } else {
-          score = matchClose;
-        }
-      } else {
-        if (sockHolder[row].stripeColor == sock)
-      }
-    */
 
-    //sockMatch[row][column] = score;
+      // If we build the matchList now, we don't even need sockMatch
+      //var mlElem = new matchListElem(iRow, iCol);
+      $j = $matchLists;
+      $j = $j.find(" ul:eq(" + score + ")");
+      $j = $j.append('<li>');
+      $j = $j.attr("data-row", iRow);
+      $j = $j.attr("data-col", iCol);
+      $j = $j.text(" ");
     }
   }
 }
 
 var sockColorMapping = [
-      "hsl(  0,100,  0)",
-      "hsl(  0,100,  0)",
-      "hsl(  0,100,100)",
-      "hsl(  0,100,100)",
-      "hsl(  0,100, 50)",
-      "hsl( 90,100, 50)",
-      "hsl(180,100, 50)",
-      "hsl(270,100, 50)"
+      "hsl(  0,100,  0)", // black
+      "hsl(  0,100,  0)", // black
+      "hsl(  0,100,100)", // white
+      "hsl(  0,100,100)", // white
+      "hsl(  0,100, 50)", // color1
+      "hsl( 90,100, 50)", // color2
+      "hsl(180,100, 50)", // color3
+      "hsl(270,100, 50)"  // color4
 ];
 
 function randomSockColor() {
