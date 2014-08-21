@@ -110,62 +110,65 @@ function generateSocksRandom() {
   }
 }
 
-
 function makeDivs() {
 
   for (var i = 0; i < 16; i++) {
-    var $newDiv = $('<div class="four columns"></div>');
-    $newDiv.css({'background-color': 'red', 'height': '50px'});
+    var $newDiv = $('<div class="four columns laundrybasket__sock"></div>');
     $('#laundrybasket').append($newDiv);
   }
 }
 
-
 function makeCanvasElems() {
 
-  $('div').each(function(index) {
-    var $newCanvas = $('<canvas id="' + index + '">' + '</canvas>');
+$('.laundrybasket__sock').each(function(index) {
+  var $newCanvas = $('<canvas id="' + index + '">' + '</canvas>');
 
-    $(this).append($newCanvas);
-  });
+  $(this).append($newCanvas);
+});
 }
 
-// Need to select each canvas element by id and draw the sock
-/*
-var elSock = document.getElementById($canvas);
-var ctx = elSock.getContext('2d');
 
-ctx.fillStyle = this.sockColor;
-ctx.fillRect(100, 10, 65, 75);
+function drawSock() {
+  
+  $('.laundrybasket__sock').each(function(index) {
 
-ctx.fillStyle = this.stripeColor;
-ctx.fillRect(100, 20, 65, 10);
+    var elSock = document.getElementById(index);
+    var ctx = elSock.getContext('2d');
 
-ctx.moveTo(165, 85);
-ctx.lineTo(100, 65);
-ctx.strokeStyle = this.sockColor;
-ctx.stroke();
-ctx.lineTo(65, 110);
-ctx.stroke();
-ctx.lineTo(130, 115);
-ctx.stroke();
-ctx.lineTo(165, 85);
-ctx.fillStyle = this.sockColor;
-ctx.fill();
+    ctx.fillStyle = this.sockColor;
+    ctx.fillRect(100, 10, 65, 75);
 
-ctx.beginPath();
-ctx.arc(98, 110, 33, 6, Math.PI, false);
-ctx.closePath();
-ctx.lineWidth = 2;
-ctx.fillStyle = this.sockColor;
-ctx.fill();
-*/
+    ctx.fillStyle = this.stripeColor;
+    ctx.fillRect(100, 20, 65, 10);
+
+    ctx.moveTo(165, 85);
+    ctx.lineTo(100, 65);
+    ctx.strokeStyle = this.sockColor;
+    ctx.stroke();
+    ctx.lineTo(65, 110);
+    ctx.stroke();
+    ctx.lineTo(130, 115);
+    ctx.stroke();
+    ctx.lineTo(165, 85);
+    ctx.fillStyle = this.sockColor;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(98, 110, 33, 6, Math.PI, false);
+    ctx.closePath();
+    ctx.lineWidth = 2;
+    ctx.fillStyle = this.sockColor;
+    ctx.fill();
+  });
+}
 
 
 alert("start");
 generateSocksRandom();
 initializeGrid();
 makeDivs();
+makeCanvasElems();
+drawSock();
 
 
 
