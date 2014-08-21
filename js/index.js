@@ -128,7 +128,7 @@ $('.laundrybasket__sock').each(function(index) {
 }
 
 
-function drawSock() {
+function drawSocks() {
   
   $('.laundrybasket__sock').each(function(index) {
 
@@ -162,13 +162,19 @@ function drawSock() {
   });
 }
 
+// from http://stackoverflow.com/questions/698301/is-there-a-native-jquery-function-to-switch-elements
+// swapping the canvas elements
+function swapSocks() {
+  $('#1').before($('#2'));
+}
 
 alert("start");
 generateSocksRandom();
 initializeGrid();
 makeDivs();
 makeCanvasElems();
-drawSock();
+drawSocks();
+swapSocks();
 
 
 
