@@ -26,7 +26,7 @@ function Sock(sockColor, stripeColor) {
   };
 }
 
-git//
+//
 // used to change the position of two socks
 // This function intentionally does not use two calls to a swap function to
 //  reserve the possibility that the exchange could be visualized or animated
@@ -131,7 +131,7 @@ $('.laundrybasket__sock').each(function(index) {
 
 
 function drawSocks() {
-  
+
   $('.laundrybasket__sock').each(function(index) {
 
     var elSock = document.getElementById(index);
