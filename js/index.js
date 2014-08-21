@@ -22,40 +22,9 @@ function Sock(sockColor, stripeColor) {
   this.setPosition = function(row, column) {
     this.row = row;
     this.column = column;
-  }
-
-  this.drawSock = function() {
-    var elSock = document.getElementById('sock-image');
-    var ctx = elSock.getContext('2d');
-
-    ctx.fillStyle = this.sockColor;
-    ctx.fillRect(100, 10, 65, 75);
-
-    ctx.fillStyle = this.stripeColor;
-    ctx.fillRect(100, 20, 65, 10);
-
-    ctx.moveTo(165, 85);
-    ctx.lineTo(100, 65);
-    ctx.strokeStyle = this.sockColor;
-    ctx.stroke();
-    ctx.lineTo(65, 110);
-    ctx.stroke();
-    ctx.lineTo(130, 115);
-    ctx.stroke();
-    ctx.lineTo(165, 85);
-    ctx.fillStyle = this.sockColor;
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(98, 110, 33, 6, Math.PI, false);
-    ctx.closePath();
-    ctx.lineWidth = 2;
-    ctx.fillStyle = this.sockColor;
-    ctx.fill();
-
-    return elSock;
-  }
+  };
 }
+
 
 //
 // used to change the position of two socks
@@ -141,24 +110,64 @@ function generateSocksRandom() {
   }
 }
 
-function makeVisualSocks()
-{
-  for (var iSock = 0; iSock < sockHolder.length; iSock++) {
-    var elSockImage = sockHolder[iSock].drawSock();
 
-    var $p = $("sockimage");
+function makeDivs() {
 
-    $(p) = $(p).clone();
-
-    $(p) = $(p).html(function() { return "<div>" + $(this).text() + "</div>"; });
-    $(p) = $(p).addClass("four columns sock-gallery__sock");
-    $(p) = $(p).appendTo($("laundrybasket"));
+  for (var i = 0; i < 16; i++) {
+    var $newDiv = $('<div class="four columns"></div>');
+    $newDiv.css({'background-color': 'red', 'height': '50px'});
+    $('#laundrybasket').append($newDiv);
   }
-
 }
+
+
+function makeCanvasElems() {
+
+  $('div').each(function(index) {
+    var $newCanvas = $('<canvas id="' + index + '">' + '</canvas>');
+
+    $(this).append($newCanvas);
+  });
+}
+
+// Need to select each canvas element by id and draw the sock
+/*
+var elSock = document.getElementById($canvas);
+var ctx = elSock.getContext('2d');
+
+ctx.fillStyle = this.sockColor;
+ctx.fillRect(100, 10, 65, 75);
+
+ctx.fillStyle = this.stripeColor;
+ctx.fillRect(100, 20, 65, 10);
+
+ctx.moveTo(165, 85);
+ctx.lineTo(100, 65);
+ctx.strokeStyle = this.sockColor;
+ctx.stroke();
+ctx.lineTo(65, 110);
+ctx.stroke();
+ctx.lineTo(130, 115);
+ctx.stroke();
+ctx.lineTo(165, 85);
+ctx.fillStyle = this.sockColor;
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(98, 110, 33, 6, Math.PI, false);
+ctx.closePath();
+ctx.lineWidth = 2;
+ctx.fillStyle = this.sockColor;
+ctx.fill();
+*/
+
 
 alert("start");
 generateSocksRandom();
 initializeGrid();
-makeVisualSocks();
+makeDivs();
+
+
+
+
 
