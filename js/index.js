@@ -165,10 +165,14 @@ function drawSocks() {
 }
 
 // from http://stackoverflow.com/questions/698301/is-there-a-native-jquery-function-to-switch-elements
-// swapping the canvas elements
+// swapping the canvas elements - hardcoded to test
 function swapSocks() {
-  $('#1').before($('#2'));
+  
+  setTimeout(function() {
+
+  $('#1').before($('#2'));}, 5000);
 }
+
 
 alert("start");
 generateSocksRandom();
