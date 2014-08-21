@@ -1,0 +1,26 @@
+body {
+  background-color: #C0C0C0;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 3.5em;
+  color: #FFFF00;
+  font-family: 'Open Sans', sans-serif;
+}
+
+canvas {
+  height: 200px;
+  width: 200px;
+  margin-left: 10%;
+}
+
+.laundrybasket__sock {
+  display: inline-block;
+  height: 200px;
+  margin-top: 5px;
+  border: 2px solid blue;
+}
+
+
+
